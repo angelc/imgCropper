@@ -1,0 +1,18 @@
+
+.cropper{
+    border: 2px dotted red;
+    position: absolute;
+
+    height: 100px;
+    width: 100px;
+    z-index: 5;
+    cursor:pointer;
+}
+
+#cropArea{
+    border: 1px solid black;
+}
+#cropArea img{
+    position:absolute;
+   
+}
