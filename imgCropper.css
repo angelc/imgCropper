@@ -1,18 +1,64 @@
-
-.cropper{
-    border: 2px dotted red;
-    position: absolute;
-
-    height: 100px;
-    width: 100px;
-    z-index: 5;
-    cursor:pointer;
+#cropArea {
+    border: 2px solid blue;
+	width:500px ;
+    height:500px ;
+	z-index: 1;
+}
+#cropArea img {
+	position: absolute;
+	width:500px ;
+    height:500px ;
+}
+.cropper {
+	border: 3px dotted blue;
+	position: absolute;
+	background-color: transparent;
+	opacity: 0.8;
+	filter: alpha(opacity = 40);
+	z-index: 3;
+	cursor: pointer;
 }
 
-#cropArea{
-    border: 1px solid black;
+.cropperMove {
+	border: 3px dotted blue;
+	position: absolute;
+	background-color: #005fff;
+	opacity: 0.5;
+	filter: alpha(opacity = 40);
+	z-index: 3;
+	cursor: move;
 }
-#cropArea img{
-    position:absolute;
-   
+
+.resizePoint{
+	border: 1px dotted black;
+	position: absolute;
+	background-color: #02ff00 ;
+	width: 10px;
+	height: 10px;
+	z-index: 1;
+}
+
+#RS0 {
+	cursor: nw-resize;
+}
+#RS1 {
+	cursor: n-resize;
+}
+#RS2 {
+	cursor: ne-resize;
+}
+#RS3 {
+	cursor: e-resize;
+}
+#RS4 {
+	cursor: se-resize;
+}
+#RS5 {
+	cursor: s-resize;
+}
+#RS6 {
+	cursor: sw-resize;
+}
+#RS7 {
+	cursor: w-resize;
 }
