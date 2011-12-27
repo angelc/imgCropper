@@ -1,5 +1,5 @@
 var imageCrop = function(params) {
-    var _pub = {};
+	var _pub = {};
 	_pub.imgProperties = {};
 	_pub.imgProperties.Width = 0;
 	_pub.imgProperties.Height = 0;
@@ -100,7 +100,7 @@ var cropArea = function(container, posX, posY, imgProperties) {
 				_pub.cropArea.setAttribute("class", "cropperMove");
 				_pub.cropArea.setAttribute("className", "cropperMove");
 				_pub.getCropLimit();
-				return false;//para deshabilitar la seleccion del cropArea
+				return false;
 			}
 			//cuando se suelta el mouse ==> para terminar de arrastrar
 			document.onmouseup = function() {
@@ -143,23 +143,27 @@ var cropArea = function(container, posX, posY, imgProperties) {
 	_pub.moveArea = function(e) {
 		if(_pub.isOnMove && !_pub.isResize) {
 			var coords = getCursorPosition(e);
-			//establecer las nuevas coordenadas
-			_pub.setPosX(coords.posX);
+			_pub.setPosX(coords.posX);	
 			_pub.setPosY(coords.posY);
-		}
-		_pub.resizePoints(e);
+		}else{
+			_pub.resizePoints(e);
+		}	//establece los nuevos valores de cropArea
+		with(_pub.cropArea.style) {
+            left = _pub.posX + 'px';
+            width = _pub.width + 'px';
+            top = _pub.posY + 'px';
+            height = _pub.height + 'px'
+        }
 	};
 	
 	//asignacion de coordX del cropArea
 	_pub.setPosX = function(x) {
 		if(x < _pub.minLeft) {
 			_pub.posX = imgProperties.left;
-			_pub.cropArea.style.left = _pub.posX + "px";
 		} else if(x > _pub.maxRight) {
-			_pub.cropArea.style.left = (_pub.maxRight + _pub.dx) + "px";
+			_pub.posX = _pub.maxRight + _pub.dx;
 		} else {
-			_pub.posX = x;
-			_pub.cropArea.style.left = (x + _pub.dx ) + "px";
+			_pub.posX = x + _pub.dx;
 		}
 	}
 	
@@ -167,12 +171,10 @@ var cropArea = function(container, posX, posY, imgProperties) {
 	_pub.setPosY = function(y) {
 		if(y < _pub.minTop) {
 			_pub.posY = imgProperties.top;
-			_pub.cropArea.style.top = _pub.posY + "px";
 		} else if(y > _pub.maxBottom) {
-			_pub.cropArea.style.top = (_pub.maxBottom + _pub.dy) + "px";
+			_pub.posY = (_pub.maxBottom + _pub.dy);
 		} else {
-			_pub.posY = y;
-			_pub.cropArea.style.top = (y + _pub.dy) + "px";
+			_pub.posY = (y + _pub.dy);
 		}
 	}
 	
@@ -184,41 +186,43 @@ var cropArea = function(container, posX, posY, imgProperties) {
 			var nx=(coords.posX - _pub.x);
 			if(_pub.Point=="RS0"||_pub.Point=="RS1"||_pub.Point=="RS2"){//arriba
 				if(coords.posY < _pub.minTop) {
-					_pub.cropArea.style.top = imgProperties.top;
-					_pub.cropArea.style.height = _pub.y + _pub.cropH - _pub.minTop-6;
+					_pub.posY = imgProperties.top;
+					_pub.height = _pub.y + _pub.cropH - _pub.minTop-6;
+				}else if(_pub.limit.minHeight > (_pub.cropH - (coords.posY - _pub.y)-6)){
+					_pub.height = _pub.limit.minHeight;
 				}else{
-					_pub.cropArea.style.top = _pub.cropY + ny;
-					_pub.cropArea.style.height = _pub.cropH - ny-6;
+					_pub.posY = _pub.cropY + ny;
+					_pub.height = _pub.cropH - ny-6;
 				}
 			}
 			if(_pub.Point=="RS2"||_pub.Point=="RS3"||_pub.Point=="RS4"){//derecha
 				if(coords.posX  > _pub.maxRight) {
-					_pub.cropArea.style.width=_pub.maxRight - _pub.x+_pub.cropW-6;
+					_pub.width=_pub.maxRight - _pub.x+_pub.cropW-6;
 				}else if(_pub.limit.minWidth < (_pub.cropW - (_pub.x - coords.posX)-6)){
-					_pub.cropArea.style.width = nx + _pub.cropW-6;
-				}else{_pub.cropArea.style.width = _pub.limit.minWidth;}
+					_pub.width = nx + _pub.cropW-6;
+				}else{_pub.width = _pub.limit.minWidth;}
 			}
 			if(_pub.Point=="RS4"||_pub.Point=="RS5"||_pub.Point=="RS6"){//abajo
 				if(coords.posY  > _pub.maxBottom) {
-					_pub.cropArea.style.height=_pub.maxBottom - _pub.y+_pub.cropH-6;
+					_pub.height=_pub.maxBottom - _pub.y+_pub.cropH-6;
+				}else if(_pub.limit.minHeight > (_pub.cropH - (_pub.y - coords.posY)-6)){
+					_pub.height = _pub.limit.minHeight;
 				}else{
-					_pub.cropArea.style.height = ny + _pub.cropH-6;
+					_pub.height = ny + _pub.cropH-6;
 				}
 			}
 			if(_pub.Point=="RS6"||_pub.Point=="RS7"||_pub.Point=="RS0"){//izquierda 
 				a=(_pub.cropW - (coords.posX - _pub.x)-5);
 				if(coords.posX < _pub.minLeft) {
-					_pub.cropArea.style.left = imgProperties.left;
-					_pub.cropArea.style.width = _pub.x + _pub.cropW - _pub.minLeft-6;
+					_pub.posX = imgProperties.left;
+					_pub.width = _pub.x + _pub.cropW - _pub.minLeft-6;
 				}else if(_pub.limit.minWidth < a){
-					_pub.cropArea.style.left = _pub.cropX + nx;
-					_pub.cropArea.style.width = _pub.cropW - nx-6;
+					_pub.posX = _pub.cropX + nx;
+					_pub.width = _pub.cropW - nx-6;
 				}else{
-					_pub.cropArea.style.width = _pub.limit.minWidth;
+					_pub.width = _pub.limit.minWidth;
 				}console.log(a);
 			}
-			_pub.height = parseInt(_pub.cropArea.style.height);
-			_pub.width = parseInt(_pub.cropArea.style.width);
 			_pub.setPoints(_pub.width,_pub.height);
 		}			
 	}
@@ -237,12 +241,12 @@ var cropArea = function(container, posX, posY, imgProperties) {
 	
 	//coloca los puntos de resize
 	_pub.setPoints = function (width,height) {
-		left= width - width + "px";
-		wcenter=(width / 2) -3 + "px";
-		right= width - 8 + "px";
-		top= height - height + "px";
-		hcenter=(height / 2) -3 + "px";
-		bottom= height - 8 + "px";
+		left = width - width + "px";
+		wcenter =(width / 2) -3 + "px";
+		right = width - 8 + "px";
+		top = height - height + "px";
+		hcenter =(height / 2) -3 + "px";
+		bottom = height - 8 + "px";
 		_pub.resizePoint[0].style.left = _pub.resizePoint[6].style.left = _pub.resizePoint[7].style.left = left;
 		_pub.resizePoint[1].style.left = _pub.resizePoint[5].style.left = wcenter;
 		_pub.resizePoint[2].style.left = _pub.resizePoint[3].style.left = _pub.resizePoint[4].style.left = right;
